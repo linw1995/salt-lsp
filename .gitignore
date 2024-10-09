@@ -134,3 +134,5 @@ clients/vscode/out/
 
 salt_lsp/data/states.pickle
 *.vsix
+.pdm-python
+result
