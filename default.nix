@@ -4,7 +4,6 @@
   dream2nix,
   ...
 }: let
-  python = config.deps.python;
   pkgs = config.deps.pkgs;
 in {
   imports = [
@@ -29,19 +28,16 @@ in {
     nativeBuildInputs =
       [
         pkgs.salt
-        config.deps.pdm
-        python
       ]
       ++ lib.optionals pkgs.stdenv.isDarwin [
         pkgs.darwin.DarwinTools
       ];
+
     preBuild = ''
       export HOME=$(mktemp -d)
       export PATH=$PATH:/usr/sbin # cmd `system_profiler` for salt-call
 
-      pdm venv create -w venv
-      pdm install --prod
-      pdm run dump_state_name_completions
+      python -c 'from salt_lsp.cmds import dump_state_name_completions; dump_state_name_completions()'
     '';
   };
 
